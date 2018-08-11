@@ -170,7 +170,15 @@ class PlayerController: NSObject, Player {
     /// - Returns: true if a new player was created and false if wrapper already exists.
     private func createPlayerWrapper(_ mediaConfig: MediaConfig) -> Bool {
         let isCreated: Bool
-        if (mediaConfig.mediaEntry.vrData != nil) {
+
+        let vrIsSupported: Bool
+        if #available(iOS 9.0, *) {
+            vrIsSupported = true
+        } else {
+            vrIsSupported = false
+        }
+        
+        if (mediaConfig.mediaEntry.vrData != nil && vrIsSupported) {
             if type(of: self.currentPlayer) is VRPlayerEngine.Type { // do not create new if current player is already vr player
                 isCreated = false
             } else {
